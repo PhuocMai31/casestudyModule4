@@ -14,6 +14,7 @@ import mailer from 'express-mailer';
 import * as dotenv from 'dotenv';
 import path from "path";
 import {Item} from "./src/schemas/product.model";
+import {Playlist1} from "./src/schemas/playlist.model";
 dotenv.config();
 
 
@@ -55,10 +56,17 @@ app.get('/home', (req,res) => {
 app.get('/test', (req,res) => {
     res.render('user/dashboard')
 })
-app.get('/test1', async (req,res) => {
-    const item = await Item.findOne({playlist: {$elemMatch: {playlist:'nhac han'}}})
-    console.log(item)
-    res.render('ff')
+app.get('/test1', jwtauth,async (req: any,res) => {
+    const accountUser = req.decoded.username
+    const playlist = await Playlist1.find().populate({
+
+        path: "musicList", select: "filename name", match: {usernameCreate: `${accountUser}`}
+
+    });
+    console.log(playlist.length)
+// @ts-ignore
+    console.log(playlist[0].musicList[0].name)
+res.send('ff')
 })
 app.listen(port, () => {
     console.log('app running on port '+ port)

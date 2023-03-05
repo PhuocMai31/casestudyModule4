@@ -35,6 +35,7 @@ const jwtauth_1 = require("../middleware/jwtauth");
 const bodyParser = __importStar(require("body-parser"));
 const fileupload = require('express-fileupload');
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const playlist_model_1 = require("../schemas/playlist.model");
 productRoutes.use((0, cookie_parser_1.default)("12345"));
 productRoutes.use(fileupload({ createParentPath: true }));
 productRoutes.use(bodyParser.json());
@@ -82,7 +83,11 @@ productRoutes.get('/list', async (req, res) => {
         let limit = req.query.limit || 3;
         let offset = req.query.offset || 0;
         const item = await product_model_1.Item.find({ usernameCreate: `${accountUser}` }).limit(limit).skip(limit * offset);
-        res.render('user/dashboard', { item: item, account: accountUser });
+        const iteminPlaylistCreate = await product_model_1.Item.find({ usernameCreate: `${accountUser}` });
+        const playlist = await playlist_model_1.Playlist1.find().populate({
+            path: "musicList", select: "filename name", match: { usernameCreate: `${accountUser}` }
+        });
+        res.render('user/dashboard', { item: item, account: accountUser, iteminPlaylistCreate: iteminPlaylistCreate, playlist: playlist });
     }
     catch (_a) {
         res.render('user/error');
@@ -108,12 +113,26 @@ productRoutes.post('/update/:id', async (req, res) => {
     res.redirect('/products/list');
 });
 productRoutes.post('/newplaylist', async (req, res) => {
+    const newPlaylist = new playlist_model_1.Playlist1({
+        name: req.body.playlist
+    });
+    const plsSuccess = await newPlaylist.save();
     for (const id of req.body.id) {
         const item = await product_model_1.Item.findOne({ _id: id });
-        item.playlist.push({ playlist: req.body.playlist });
-        const itemInPlaylist = await item.save();
+        item.playlist1.push(newPlaylist);
+        const playlistInitem = await item.save();
+        const playlist = await playlist_model_1.Playlist1.findOne({ name: req.body.playlist });
+        playlist.musicList.push(item);
+        const playlistPushitem = await playlist.save();
+        console.log('day la playlist', playlistPushitem);
     }
     res.send("<script>alert(\"Tạo playlist mới thành công\"); window.location.href = \"/products/list\"; </script>");
+});
+productRoutes.get('/deleteplaylist/:id', async (req, res) => {
+    console.log(req.params.id);
+    const idofPlaylist = req.params.id;
+    const item = await playlist_model_1.Playlist1.deleteOne({ _id: idofPlaylist });
+    res.redirect('/products/list');
 });
 exports.default = productRoutes;
 //# sourceMappingURL=product.router.js.map

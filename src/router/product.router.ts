@@ -9,6 +9,7 @@ import {Author} from "../schemas/author.model";
 const fileupload = require('express-fileupload');
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
+import {Playlist1} from "../schemas/playlist.model";
 productRoutes.use(cookieParser("12345"));
 productRoutes.use(fileupload({ createParentPath: true }));
 // productRoutes.use(express.static('public'))
@@ -57,8 +58,12 @@ productRoutes.get('/list', async (req: any,res) =>{
         const accountUser = req.decoded.username
         let limit = req.query.limit || 3;
         let offset = req.query.offset || 0;
-        const item = await Item.find({usernameCreate: `${accountUser}`}).limit(limit).skip(limit*offset)
-        res.render('user/dashboard', {item: item, account: accountUser} )
+        const item = await Item.find({usernameCreate: `${accountUser}`}).limit(limit).skip(limit*offset);
+        const iteminPlaylistCreate = await Item.find({usernameCreate: `${accountUser}`});
+        const playlist = await Playlist1.find().populate({
+            path: "musicList", select: "filename name", match: {usernameCreate: `${accountUser}`}
+        });
+        res.render('user/dashboard', {item: item, account: accountUser, iteminPlaylistCreate: iteminPlaylistCreate, playlist: playlist } )
     } catch {
         res.render('user/error');
     }
@@ -92,11 +97,40 @@ productRoutes.post('/newplaylist', async (req: any, res) =>{
     //     // @ts-ignore
     //     // item.playlist.push({keyword: req.body.keyword});
     // })
+    const newPlaylist = new Playlist1({
+        name: req.body.playlist
+    })
+    const plsSuccess = await newPlaylist.save();
     for (const id of req.body.id) {
-        const item = await Item.findOne({_id: id})
-        item.playlist.push({playlist: req.body.playlist});
-        const itemInPlaylist = await item.save()
+        const item = await Item.findOne({_id: id});
+        // const playlist1New = new Playlist1({
+        //     name: req.body.playlist
+        // });
+        // // @ts-ignore
+        // // item.playlist1 = playlist1New
+        // item.playlist1.push({playlist: req.body.playlist});
+
+        item.playlist1.push(newPlaylist);
+        // const itemInPlayList = await playlist1New.save();
+        const playlistInitem = await item.save();
+        const playlist = await Playlist1.findOne({name: req.body.playlist})
+
+        playlist.musicList.push(item)
+        const playlistPushitem = await playlist.save()
+        console.log('day la playlist',playlistPushitem)
+
+        // const item = await Item.findByIdAndUpdate(
+        //     id,
+        //     { $push: { plsSuccess: plsSuccess._id } },
+        //     { new: true, useFindAndModify: false }
+        // )
     }
     res.send("<script>alert(\"Tạo playlist mới thành công\"); window.location.href = \"/products/list\"; </script>");
 });
+productRoutes.get('/deleteplaylist/:id', async (req, res) => {
+    console.log(req.params.id)
+    const idofPlaylist = req.params.id;
+    const item = await Playlist1.deleteOne({_id : idofPlaylist})
+    res.redirect('/products/list')
+})
 export default productRoutes

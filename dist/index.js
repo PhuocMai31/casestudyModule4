@@ -34,8 +34,9 @@ const product_router_1 = __importDefault(require("./src/router/product.router"))
 const passport_1 = __importDefault(require("passport"));
 const express_session_1 = __importDefault(require("express-session"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const jwtauth_1 = require("./src/middleware/jwtauth");
 const dotenv = __importStar(require("dotenv"));
-const product_model_1 = require("./src/schemas/product.model");
+const playlist_model_1 = require("./src/schemas/playlist.model");
 dotenv.config();
 const port = 3000;
 const app = (0, express_1.default)();
@@ -69,10 +70,14 @@ app.get('/home', (req, res) => {
 app.get('/test', (req, res) => {
     res.render('user/dashboard');
 });
-app.get('/test1', async (req, res) => {
-    const item = await product_model_1.Item.findOne({ playlist: { $elemMatch: { playlist: 'nhac han' } } });
-    console.log(item);
-    res.render('ff');
+app.get('/test1', jwtauth_1.jwtauth, async (req, res) => {
+    const accountUser = req.decoded.username;
+    const playlist = await playlist_model_1.Playlist1.find().populate({
+        path: "musicList", select: "filename name", match: { usernameCreate: `${accountUser}` }
+    });
+    console.log(playlist.length);
+    console.log(playlist[0].musicList[0].name);
+    res.send('ff');
 });
 app.listen(port, () => {
     console.log('app running on port ' + port);

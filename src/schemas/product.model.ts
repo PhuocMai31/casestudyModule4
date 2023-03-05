@@ -8,12 +8,14 @@ interface IItem {
 
     filename: string,
     usernameCreate: string,
-    playlist: object[]
+    // playlist: object[],
+    playlist1: object[]
 }
 
-const playlistSchema = new Schema({
-    playlist: String
-})
+// const playlistSchema = new Schema({
+//     playlist: String
+// })
+
 
 const itemSchema = new Schema<IItem>({
     name: String,
@@ -22,9 +24,9 @@ const itemSchema = new Schema<IItem>({
     image: String,
     filename: String,
     usernameCreate: String,
-// @ts-ignore
-//     author: { type:Schema.Types.ObjectId, ref: "Author" },
-    playlist: [playlistSchema],
+    // @ts-ignore
+    playlist1: [{ type:Schema.Types.ObjectId, ref: "Playlist1" }] ,
+    // playlist: [playlistSchema],
 })
 const Item = model<IItem>('Item', itemSchema);
 export {Item}

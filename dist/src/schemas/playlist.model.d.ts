@@ -23,14 +23,9 @@
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
-interface IItem {
+interface IPlaylist1 {
     name: string;
-    singer: string;
-    category: string;
-    image: string;
-    filename: string;
-    usernameCreate: string;
-    playlist1: object[];
+    musicList: object[];
 }
-declare const Item: import("mongoose").Model<IItem, {}, {}, {}, any>;
-export { Item };
+declare const Playlist1: import("mongoose").Model<IPlaylist1, {}, {}, {}, any>;
+export { Playlist1 };
