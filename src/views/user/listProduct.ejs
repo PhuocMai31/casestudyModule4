@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Products</title>
+</head>
+<body>
+<div style="text-align: center">
+    <form action="/products/list" method="GET">
+
+        <label>Keyword:</label>
+
+        <input type="text" id="keyword" name="keyword">
+
+        </br>
+
+        <label>Author:</label>
+
+        <input type="text" id="author" name="author">
+
+        </br>
+
+        <div class="form-group">
+
+            <button type="submit" class="btn btn-primary" >Search</button></div>
+
+    </form>
+    <div class="pagination">
+        <br>
+        <a href="#">«</a>
+
+        <a href="/products/list?offset=0&limit=2">1</a>
+
+        <a href="/products/list?offset=1&limit=2">2</a>
+
+        <a href="/products/list?offset=2&limit=2">3</a>
+
+        <a href="/products/list?offset=3&limit=2">4</a>
+
+        <a href="/products/list?offset=4&limit=2">5</a>
+
+        <a href="/products/list?offset=5&limit=2">6</a>
+
+        <a href="#">»</a>
+
+    </div>
+    <br>
+    <a href="/products/create">Create</a>
+    <a href="/auth/logout">Logout</a>
+<h2>List Products</h2>
+<% for(const product of item) { %>
+    <h3>
+        Name: <%= product.name %>
+    </h3>
+        <p>
+            Avatar: <img class="card-img-top" style="max-height: 80px" src="/<%=product.avatar%>" alt="Card image cap">
+        </p>
+    <p>
+        Price: <%= product.price %>
+    </p>
+    <p>
+        Producer: <%= product.producer %>
+    </p>
+    <p>
+       keyword: <%= product.keywords[0].keyword %>
+    </p>
+    <p>
+        Author: <%= product.author.name %>
+    </p>
+    </br>
+    <a onclick="return confirm('are you sure')"
+       href="/products/delete/<%= product.id %>" class="btn btn-danger">Delete</a>
+    <a onclick="return confirm('are you wan to Update')"
+       href="/products/update/<%= product.id %>" class="btn btn-warning">Update</a>
+<% } %>
+</div>
+</body>
+</html>

@@ -10,9 +10,7 @@ const jwtauth = async (req, res, next) => {
     try {
         var cookies = cookie_1.default.parse(req.headers.cookie || '');
         let accessToken = cookies.name;
-        console.log(accessToken);
         if (accessToken) {
-            console.log(111);
             jsonwebtoken_1.default.verify(accessToken, "123456789", (err, decoded) => {
                 if (err) {
                     return res.status(401).json({

@@ -45,7 +45,7 @@ loginRoutes.get('/logout', cleanCookie_1.cleanCookie, (req, res) => {
     res.redirect('/auth/login');
 });
 loginRoutes.get('/login', (req, res) => {
-    res.render('newlogin-signin');
+    res.render('login/newlogin-signin');
 });
 loginRoutes.post('/login', async (req, res, next) => {
     try {
@@ -76,7 +76,7 @@ loginRoutes.post('/login', async (req, res, next) => {
     }
 });
 loginRoutes.get('/register', (req, res) => {
-    res.render('register');
+    res.render('login/newlogin-signin');
 });
 loginRoutes.post('/register', async (req, res) => {
     try {
@@ -120,7 +120,7 @@ loginRoutes.get('/verify', async (req, res) => {
     });
 });
 loginRoutes.get('/password/reset', (req, res) => {
-    res.render('forgotPassword');
+    res.render('login/forgotPassword');
 });
 loginRoutes.post('/password/email', async (req, res) => {
     if (!req.body.email) {
@@ -145,7 +145,7 @@ loginRoutes.get('/password/reset/:email', (req, res) => {
         res.redirect('/password/reset');
     }
     else {
-        res.render('newPasswordForm', { email: req.params.email, token: req.query.token });
+        res.render('login/newPasswordForm', { email: req.params.email, token: req.query.token });
     }
 });
 loginRoutes.post('/password/reset', (req, res) => {

@@ -25,11 +25,12 @@
 /// <reference types="mongoose/types/inferschematype" />
 interface IItem {
     name: string;
-    price: number;
-    producer: string;
-    avatar: string;
-    author: string;
-    keywords: object[];
+    singer: string;
+    category: string;
+    image: string;
+    filename: string;
+    usernameCreate: string;
+    playlist: object[];
 }
 declare const Item: import("mongoose").Model<IItem, {}, {}, {}, any>;
 export { Item };

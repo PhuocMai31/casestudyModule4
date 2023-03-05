@@ -1,0 +1,69 @@
+<div class="page-heading">
+
+    <h1>Register a new product</h1>
+
+</div>
+
+<form action="/products/create" method="POST" enctype="multipart/form-data">
+
+    <div class="control-group">
+
+        <div class="form-group floating-label-form-group controls">
+
+            <label>Name</label>
+
+            <input type="text" class="form-control" id="name" name="name">
+
+        </div>
+
+    </div>
+
+    <div class="control-group">
+
+        <div class="form-group floating-label-form-group controls">
+
+            <label>Price</label>
+
+            <input type="number" class="form-control" id="price" name="price">
+
+        </div>
+
+    </div>
+
+    <div class="control-group">
+
+        <div class="form-group floating-label-form-group controls">
+
+            <label>Producer</label>
+
+            <input type="text" class="form-control" id="producer" name="producer">
+
+        </div>
+
+    </div>
+
+    <div class="control-group">
+
+        <div class="form-group floating-label-form-group controls">
+
+            <label>Author</label>
+
+            <input type="text" class="form-control" id="avatar" name="author">
+
+        </div>
+
+    </div>
+    <div class="form-group">
+        <label>Keyword</label>
+        <input type="text" class="form-control" name="keyword">
+    </div>
+    <div class="form-group">
+        <label>Avatar</label>
+        <input type="file" class="form-control" name="avatar">
+    </div>
+
+    <div class="form-group">
+
+        <button type="submit" class="btn btn-primary" >Create</button></div>
+
+</form>

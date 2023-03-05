@@ -21,7 +21,7 @@ loginRoutes.get('/logout',cleanCookie,(req: Request, res: Response) => {
 })
 
 loginRoutes.get('/login', (req: Request,res: Response) => {
-    res.render('newlogin-signin')
+    res.render('login/newlogin-signin')
 })
 loginRoutes.post('/login', async (req: any,res: Response, next) =>{
     try{
@@ -63,7 +63,7 @@ loginRoutes.post('/login', async (req: any,res: Response, next) =>{
     }
 );
 loginRoutes.get('/register', (req: Request,res: Response) => {
-    res.render('register')
+    res.render('login/newlogin-signin')
 })
 loginRoutes.post('/register', async (req: Request, res: Response) => {
     try{
@@ -106,7 +106,7 @@ loginRoutes.get('/verify', async  (req, res) => {
 
 
 loginRoutes.get('/password/reset', (req, res) => {
-    res.render('forgotPassword')
+    res.render('login/forgotPassword')
 })
 loginRoutes.post('/password/email', async (req, res ) => {
     if (!req.body.email) {
@@ -128,7 +128,7 @@ loginRoutes.get('/password/reset/:email', (req, res ) => {
     if (!req.params.email || !req.query.token) {
         res.redirect('/password/reset')
     } else {
-        res.render('newPasswordForm', { email: req.params.email, token: req.query.token})
+        res.render('login/newPasswordForm', { email: req.params.email, token: req.query.token})
     }
 })
 loginRoutes.post('/password/reset', (req,res) => {
