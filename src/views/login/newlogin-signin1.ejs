@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Document</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html, body {
+
+            display: grid;
+            height: 100%;
+            width: 100%;
+            place-items: center;
+            /*background: -webkit-linear-gradient(left, #003366,#004080,#0059b3*/
+            /*, #0073e6);*/
+            background-image: url("https://www.7pace.com/wp-content/uploads/2020/08/COVER-Music.png");
+        }
+
+        ::selection {
+            background: #1a75ff;
+            color: #fff;
+        }
+
+        .wrapper {
+
+            overflow: hidden;
+            max-width: 390px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .wrapper .title-text {
+            display: flex;
+            width: 200%;
+        }
+
+        .wrapper .title {
+            width: 50%;
+            font-size: 35px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .wrapper .slide-controls {
+            position: relative;
+            display: flex;
+            height: 50px;
+            width: 100%;
+            overflow: hidden;
+            margin: 30px 0 10px 0;
+            justify-content: space-between;
+            border: 1px solid lightgrey;
+            border-radius: 15px;
+        }
+
+        .slide-controls .slide {
+            height: 100%;
+            width: 100%;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 500;
+            text-align: center;
+            line-height: 48px;
+            cursor: pointer;
+            z-index: 1;
+            transition: all 0.6s ease;
+        }
+
+        .slide-controls label.signup {
+            color: #000;
+        }
+
+        .slide-controls .slider-tab {
+            position: absolute;
+            height: 100%;
+            width: 50%;
+            left: 0;
+            z-index: 0;
+            border-radius: 15px;
+            background: -webkit-linear-gradient(left, #003366, #004080, #0059b3, #0073e6);
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        #signup:checked ~ .slider-tab {
+            left: 50%;
+        }
+
+        #signup:checked ~ label.signup {
+            color: #fff;
+            cursor: default;
+            user-select: none;
+        }
+
+        #signup:checked ~ label.login {
+            color: #000;
+        }
+
+        #login:checked ~ label.signup {
+            color: #000;
+        }
+
+        #login:checked ~ label.login {
+            cursor: default;
+            user-select: none;
+        }
+
+        .wrapper .form-container {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .form-container .form-inner {
+            display: flex;
+            width: 200%;
+        }
+
+        .form-container .form-inner form {
+            width: 50%;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .form-inner form .field {
+            height: 50px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .form-inner form .field input {
+            height: 100%;
+            width: 100%;
+            outline: none;
+            padding-left: 15px;
+            border-radius: 15px;
+            border: 1px solid lightgrey;
+            border-bottom-width: 2px;
+            font-size: 17px;
+            transition: all 0.3s ease;
+        }
+
+        .form-inner form .field input:focus {
+            border-color: #1a75ff;
+            /* box-shadow: inset 0 0 3px #fb6aae; */
+        }
+
+        .form-inner form .field input::placeholder {
+            color: #999;
+            transition: all 0.3s ease;
+        }
+
+        form .field input:focus::placeholder {
+            color: #1a75ff;
+        }
+
+        .form-inner form .pass-link {
+            margin-top: 5px;
+        }
+
+        .form-inner form .signup-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .form-inner form .pass-link a,
+        .form-inner form .signup-link a {
+            color: #1a75ff;
+            text-decoration: none;
+        }
+
+        .form-inner form .pass-link a:hover,
+        .form-inner form .signup-link a:hover {
+            text-decoration: underline;
+        }
+
+        form .btn {
+            height: 50px;
+            width: 100%;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        form .btn .btn-layer {
+            height: 100%;
+            width: 300%;
+            position: absolute;
+            left: -100%;
+            background: -webkit-linear-gradient(right, #003366, #004080, #0059b3, #0073e6);
+            border-radius: 15px;
+            transition: all 0.4s ease;;
+        }
+
+        form .btn:hover .btn-layer {
+            left: 0;
+        }
+
+        form .btn input[type="submit"] {
+            height: 100%;
+            width: 100%;
+            z-index: 1;
+            position: relative;
+            background: none;
+            border: none;
+            color: #fff;
+            padding-left: 0;
+            border-radius: 15px;
+            font-size: 20px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .note-signin small, .note-signup small {
+            color: red;
+        }
+
+        .note-signup {
+            padding-top: 20px;
+        }
+
+        .back-home {
+            font-size: 15px;
+            padding-top: 20px;
+            text-align: center;
+        }
+
+        .back-home a {
+            text-decoration: none;
+        }
+
+
+        span {
+            text-align: center;
+            position: relative;
+        }
+
+        .or {
+            padding-top: 20px;
+            width: 320px;
+            display: flex;
+            justify-content: space-between;
+            align-content: center;
+            color: #2b2684;
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+        }
+
+        .or hr {
+            width: 80%;
+            height: 1px;
+            background-color: #2b2684;
+            border: none;
+            align-self: center;
+        }
+
+        .google-btn {
+            text-align: center;
+            height: 40px;
+            border: 1px solid #2b2684;
+            border-radius: 15px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            margin-bottom: 20px;
+            color: #2b2684;
+            transition: 0.5s;
+
+        }
+
+        .google-btn svg {
+            width: 20px;
+            margin-right: 10px;
+        }
+
+        .google-btn a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="title-text">
+        <div class="title login">Đăng nhập</div>
+        <div class="title signup">Đăng ký</div>
+    </div>
+
+    <div class="form-container">
+        <div class="slide-controls">
+            <input type="radio" name="slide" id="login" checked>
+            <input type="radio" name="slide" id="signup">
+            <label for="login" class="slide login">Đăng nhập</label>
+            <label for="signup" class="slide signup">Đăng ký</label>
+            <div class="slider-tab"></div>
+        </div>
+
+        <div class="form-inner">
+            <form id="form-auth" method="post" action="/auth/login" enctype="multipart/form-data" class="login">
+                <div class="field">
+                    <input type="text" placeholder="Email" required name="username">
+
+                </div>
+                <div class="field">
+                    <input type="password" placeholder="Mật khẩu" required name="password">
+                </div>
+                <div class="pass-link"><a href="/auth/password/reset">Quên mật khẩu?</a></div>
+                <div class="field btn">
+                    <div class="btn-layer"></div>
+                    <input type="submit" value="Đăng nhập">
+                </div>
+                <div class="back-home">
+                    <a href="/home">Quay lại trang chủ</a>
+                </div>
+                <div class="or">
+                    <hr>
+                    <span>OR</span>
+                    <hr>
+                </div>
+                <div style="padding-left: 80px">
+                    <button class="google-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-google" viewBox="0 0 16 16">
+                            <path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"/>
+                        </svg>
+                        <a href="/auth/login/google">Login with Google</a>
+                    </button>
+                </div>
+                <div class="signup-link">Bạn không có tài khoản? <a href="">Đăng ký ngay</a></div>
+                <div class="note-signup">
+                    <small>*Chú ý: Không chia sẻ tài khoản hoặc mật khẩu với người lạ!</small>
+                </div>
+
+            </form>
+            <form method="post" action="/auth/register" enctype="multipart/form-data" class="signup">
+                <div class="field">
+                    <input type="text" placeholder="Email" required name="username">
+                </div>
+                <div class="field">
+                    <input type="password" placeholder="Mật khẩu" required name="password">
+                </div>
+                <div class="note-signin">
+                    <small>*Lưu ý: Mật khẩu phải có 8 kí tự, một chữ cái và một cữ số!</small>
+                </div>
+                <!--                <div class="field">-->
+                <!--                    <input type="password" placeholder="Nhập lại mật khẩu" required>-->
+                <!--                </div>-->
+                <div class="field btn">
+                    <div class="btn-layer"></div>
+                    <input type="submit" value="Tạo tài khoản">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const loginText = document.querySelector(".title-text .login");
+    const loginForm = document.querySelector("form.login");
+    const loginBtn = document.querySelector("label.login");
+    const signupBtn = document.querySelector("label.signup");
+    const signupLink = document.querySelector("form .signup-link a");
+    signupBtn.onclick = (() => {
+        loginForm.style.marginLeft = "-50%";
+        loginText.style.marginLeft = "-50%";
+    });
+    loginBtn.onclick = (() => {
+        loginForm.style.marginLeft = "0%";
+        loginText.style.marginLeft = "0%";
+    });
+    signupLink.onclick = (() => {
+        signupBtn.click();
+        return false;
+    });
+
+</script>
+</body>
+</html>

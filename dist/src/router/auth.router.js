@@ -45,7 +45,7 @@ loginRoutes.get('/logout', cleanCookie_1.cleanCookie, (req, res) => {
     res.redirect('/auth/login');
 });
 loginRoutes.get('/login', (req, res) => {
-    res.render('login/newlogin-signin');
+    res.render('login/newlogin-signin1');
 });
 loginRoutes.post('/login', async (req, res, next) => {
     try {
@@ -190,7 +190,16 @@ loginRoutes.post('/password/reset', (req, res) => {
 });
 loginRoutes.get('/login/google', passport_1.default.authenticate('google', { scope: ['profile', 'email'] }));
 loginRoutes.get('/google/callback', passport_1.default.authenticate('google'), (req, res) => {
-    res.send('you are authenticated');
+    let payload = {
+        user_id: "9832489",
+        username: "Google",
+        role: "account"
+    };
+    const token = jsonwebtoken_1.default.sign(payload, '123456789', {
+        expiresIn: 36000,
+    });
+    res.cookie("name", token);
+    res.redirect('/products/list');
 });
 exports.default = loginRoutes;
 //# sourceMappingURL=auth.router.js.map

@@ -19,6 +19,7 @@
 
     <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.3.0/css/all.css">
 
 </head>
 
@@ -44,17 +45,16 @@
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
             <a class="nav-link" href="index.html">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>My PlayList :</span></a>
+                <i class="fa-regular fa-user-music"></i>
+                <span>ALL PlayList :</span></a>
         </li>
         <% playlist.forEach((playlist, index) => { %>
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fas fa-fw fa-cog"></i>
-                <span><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#runModal<%= playlist.id %>">
-                <%= playlist.name %>
+                <span><button style="background-color: darkorange; color: whitesmoke" type="button" class="btn" data-toggle="modal" data-target="#runModal<%= playlist.id %>">
+                <%= playlist.name %> <i style="font-size: 20px; margin-left: 10px; color: black" class="fa-duotone fa-list-music"></i>
             </button></span>
             </a>
         </li>
@@ -120,18 +120,10 @@
                 </button>
 
                 <!-- Topbar Search -->
-                <form
+
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                    <div class="input-group">
-                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                               aria-label="Search" aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                            <button class="btn btn-primary" type="button">
-                                <i class="fas fa-search fa-sm"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
+                    <a href="/home" class="btn btn-secondary">Trang Chủ</a>
+
 
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
@@ -202,7 +194,7 @@
 
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                    <i style="font-size: 50px; margin-left: 40px" class="fa-thin fa-tv-music"></i>
                     <button style="margin-left: 265px" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1">
                             Tạo Playlist
                         </button>

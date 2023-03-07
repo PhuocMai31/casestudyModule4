@@ -3,7 +3,7 @@ import {UserModel} from '../schemas/user.model'
 import LocalStrategy from 'passport-local';
 import GoogleStragery from 'passport-google-oauth2';
 import {Account} from "../schemas/account.model";
-
+import jwt from 'jsonwebtoken';
 
 
 
@@ -31,7 +31,7 @@ passport.use(new GoogleStragery({
     callbackURL: 'http://localhost:3000/auth/google/callback',
     passReqToCallback: true
 },
-    async (request, accessToken, refreshToken, profile, done) =>{
+    async (request, accessToken, refreshToken, profile,done) =>{
     try{
         let existingUser = await Account.findOne({'google_id': profile.id});
         console.log(typeof (profile.email))

@@ -52,21 +52,13 @@ app.use('/admin', adminRouter);
 // app.use('/products', jwtauth);
 
 // xử lí router
-app.get('/home', (req,res) => {
-    res.render('home_Template')
-})
-app.get('/test', async (req,res) => {
+// app.get('/home', (req,res) => {
+//     res.render('home_Template')
+// })
+
+app.get('/home', jwtauth,async (req: any,res) => {
     const item = await Item.find()
     res.render('home', {item: item})
-})
-app.get('/test1', jwtauth,async (req: any,res) => {
-    const accountUser = req.decoded.username
-    const playlist = await Playlist1.find().populate({
-        path: "musicList", select: "filename name usernameCreate" , match: {usernameCreate: accountUser}
-    });
-// @ts-ignore
-    console.log(playlist[0].musicList)
-res.send('ff')
 })
 app.listen(port, () => {
     console.log('app running on port '+ port)
