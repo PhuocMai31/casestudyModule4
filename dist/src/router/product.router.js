@@ -29,13 +29,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const productRoutes = (0, express_1.Router)();
 const product_model_1 = require("../schemas/product.model");
-const multer_1 = __importDefault(require("multer"));
-const upload = (0, multer_1.default)();
 const jwtauth_1 = require("../middleware/jwtauth");
 const bodyParser = __importStar(require("body-parser"));
 const fileupload = require('express-fileupload');
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const playlist_model_1 = require("../schemas/playlist.model");
+const bug_model_1 = require("../schemas/bug.model");
 productRoutes.use((0, cookie_parser_1.default)("12345"));
 productRoutes.use(fileupload({ createParentPath: true }));
 productRoutes.use(bodyParser.json());
@@ -85,7 +84,7 @@ productRoutes.get('/list', async (req, res) => {
         const item = await product_model_1.Item.find({ usernameCreate: `${accountUser}` }).limit(limit).skip(limit * offset);
         const iteminPlaylistCreate = await product_model_1.Item.find({ usernameCreate: `${accountUser}` });
         const playlist = await playlist_model_1.Playlist1.find().populate({
-            path: "musicList", select: "filename name", match: { usernameCreate: `${accountUser}` }
+            path: "musicList", select: "filename name usernameCreate", match: { usernameCreate: accountUser }
         });
         res.render('user/dashboard', { item: item, account: accountUser, iteminPlaylistCreate: iteminPlaylistCreate, playlist: playlist });
     }
@@ -133,6 +132,15 @@ productRoutes.get('/deleteplaylist/:id', async (req, res) => {
     const idofPlaylist = req.params.id;
     const item = await playlist_model_1.Playlist1.deleteOne({ _id: idofPlaylist });
     res.redirect('/products/list');
+});
+productRoutes.post('/bugreport', async (req, res) => {
+    console.log(req.body);
+    const itemBug = new bug_model_1.Bug({
+        title: req.body.title,
+        bugreport: req.body.bugreport,
+    });
+    await itemBug.save();
+    res.send("<script>alert(\"Gửi Báo Cáo thành công\"); window.location.href = \"/products/list\"; </script>");
 });
 exports.default = productRoutes;
 //# sourceMappingURL=product.router.js.map

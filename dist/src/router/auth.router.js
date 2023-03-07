@@ -49,12 +49,14 @@ loginRoutes.get('/login', (req, res) => {
 });
 loginRoutes.post('/login', async (req, res, next) => {
     try {
+        console.log(req.body.password);
+        console.log(req.body.username);
         const account = await account_model_1.Account.findOne({ username: req.body.username });
-        if (account) {
+        if (account.password == req.body.password) {
             if (account.status == "unverify") {
                 return res.send("<script>alert(\"Vui Lòng Kiểm Tra Email Xác Thực Tài Khoản\"); window.location.href = \"/auth/login\"; </script>");
             }
-            else if (account.status == "verify") {
+            else if (account.status == "verify" && account.role == "user") {
                 let payload = {
                     user_id: account["id"],
                     username: account["username"],
@@ -65,6 +67,18 @@ loginRoutes.post('/login', async (req, res, next) => {
                 });
                 res.cookie("name", token);
                 res.redirect('/products/list');
+            }
+            else if (account.role == "admin") {
+                let payload = {
+                    user_id: account["id"],
+                    username: account["username"],
+                    role: account["role"]
+                };
+                const token = jsonwebtoken_1.default.sign(payload, '123456789', {
+                    expiresIn: 36000,
+                });
+                res.cookie("name", token);
+                res.redirect('/admin/list');
             }
         }
         else {
@@ -91,6 +105,7 @@ loginRoutes.post('/register', async (req, res) => {
             await newAccount.save((err, newAccount) => {
                 if (!err) {
                     bcrypt_1.default.hash(newAccount.username, parseInt(process.env.BCRYPT_SALT_ROUND)).then((hashedEmail) => {
+                        console.log(newAccount.username);
                         mailer.sendMail(newAccount.username, "Xin Chào,Hãy xác thực tài khoản web nghe nhạc Online cùng Phước đẹp trai và Hoàng Nhật Bản", `<h4>Hãy Nhấn Vào Link Dưới Đây Để Xác Thực Email</h4>><br><a href="${process.env.APP_URL}/auth/verify?email=${newAccount.username}&token=${hashedEmail}"> Verify </a>`);
                     });
                 }

@@ -25,11 +25,13 @@ loginRoutes.get('/login', (req: Request,res: Response) => {
 })
 loginRoutes.post('/login', async (req: any,res: Response, next) =>{
     try{
+        console.log(req.body.password)
+        console.log(req.body.username)
         const account = await Account.findOne({username: req.body.username});
-        if(account){
+        if(account.password == req.body.password){
             if(account.status == "unverify"){
                 return res.send("<script>alert(\"Vui Lòng Kiểm Tra Email Xác Thực Tài Khoản\"); window.location.href = \"/auth/login\"; </script>");
-            } else if (account.status == "verify"){
+            } else if (account.status == "verify" && account.role == "user"){
                 let payload = {
                     user_id: account["id"],
                     username: account["username"],
@@ -40,6 +42,17 @@ loginRoutes.post('/login', async (req: any,res: Response, next) =>{
                 });
                 res.cookie("name", token )
                 res.redirect('/products/list')
+            } else if (account.role == "admin"){
+                let payload = {
+                    user_id: account["id"],
+                    username: account["username"],
+                    role: account["role"]
+                }
+                const token = jwt.sign(payload, '123456789', {
+                    expiresIn: 36000,
+                });
+                res.cookie("name", token );
+                res.redirect('/admin/list')
             }
         } else {
             return res.send("<script>alert(\"Wrong Email or Password\"); window.location.href = \"/auth/login\"; </script>");
@@ -48,18 +61,6 @@ loginRoutes.post('/login', async (req: any,res: Response, next) =>{
     catch (error){
         return res.send("<script>alert(\"Lỗi Phía Server\"); window.location.href = \"/auth/login\"; </script>");
     }
-    // passport.authenticate('local', (err, user) =>{
-    //     if(err){
-    //         return next(err)
-    //     }
-    //     if(!user){
-    //         return res.send("<script>alert(\"Wrong Email or Password\"); window.location.href = \"/auth/login\"; </script>");
-    //     }
-    //     // @ts-ignore
-    //     req.login(user, () => {
-    //         res.send('you are authenticated')
-    //     })
-    // }) (req, res , next)
     }
 );
 loginRoutes.get('/register', (req: Request,res: Response) => {
@@ -67,6 +68,7 @@ loginRoutes.get('/register', (req: Request,res: Response) => {
 })
 loginRoutes.post('/register', async (req: Request, res: Response) => {
     try{
+
         const user = await Account.findOne({username: req.body.username});
         if (!user) {
         const newAccount = new Account({
@@ -78,6 +80,7 @@ loginRoutes.post('/register', async (req: Request, res: Response) => {
             await newAccount.save((err,newAccount) => {
             if(!err){
                 bcrypt.hash(newAccount.username, parseInt(process.env.BCRYPT_SALT_ROUND)).then((hashedEmail) => {
+                    console.log(newAccount.username)
                     mailer.sendMail(newAccount.username, "Xin Chào,Hãy xác thực tài khoản web nghe nhạc Online cùng Phước đẹp trai và Hoàng Nhật Bản", `<h4>Hãy Nhấn Vào Link Dưới Đây Để Xác Thực Email</h4>><br><a href="${process.env.APP_URL}/auth/verify?email=${newAccount.username}&token=${hashedEmail}"> Verify </a>`)
                 });
             } else {
@@ -100,7 +103,6 @@ loginRoutes.get('/verify', async  (req, res) => {
      })
     Account.updateOne({username: req.query.email}, { $set: { status: "verify" }}, (err, result) => {
         res.send("<script>alert(\"Xác thực email thành công\"); window.location.href = \"/auth/login\"; </script>");
-
     })
 })
 

@@ -15,6 +15,7 @@ import * as dotenv from 'dotenv';
 import path from "path";
 import {Item} from "./src/schemas/product.model";
 import {Playlist1} from "./src/schemas/playlist.model";
+import adminRouter from "./src/router/admin.router";
 dotenv.config();
 
 
@@ -47,25 +48,24 @@ app.use(passport.session());
 app.use(bodyParser.json());
 app.use('/auth', loginRoutes);
 app.use('/products', productRouter);
+app.use('/admin', adminRouter);
 // app.use('/products', jwtauth);
 
 // xử lí router
 app.get('/home', (req,res) => {
     res.render('home_Template')
 })
-app.get('/test', (req,res) => {
-    res.render('user/dashboard')
+app.get('/test', async (req,res) => {
+    const item = await Item.find()
+    res.render('home', {item: item})
 })
 app.get('/test1', jwtauth,async (req: any,res) => {
     const accountUser = req.decoded.username
     const playlist = await Playlist1.find().populate({
-
-        path: "musicList", select: "filename name", match: {usernameCreate: `${accountUser}`}
-
+        path: "musicList", select: "filename name usernameCreate" , match: {usernameCreate: accountUser}
     });
-    console.log(playlist.length)
 // @ts-ignore
-    console.log(playlist[0].musicList[0].name)
+    console.log(playlist[0].musicList)
 res.send('ff')
 })
 app.listen(port, () => {

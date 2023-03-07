@@ -1,15 +1,12 @@
 import express, {Router} from 'express';
 const productRoutes = Router();
 import {Item} from "../schemas/product.model";
-import multer from 'multer';
-const upload = multer();
 import {jwtauth} from "../middleware/jwtauth";
 import * as bodyParser from "body-parser";
-import {Author} from "../schemas/author.model";
 const fileupload = require('express-fileupload');
-import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import {Playlist1} from "../schemas/playlist.model";
+import {Bug} from "../schemas/bug.model";
 productRoutes.use(cookieParser("12345"));
 productRoutes.use(fileupload({ createParentPath: true }));
 // productRoutes.use(express.static('public'))
@@ -21,7 +18,6 @@ productRoutes.get('/create' ,(req: any,res)=> {
     const accountRole = req.decoded.role
         if(accountRole !== "user"){
             return  res.end("khong co quyen tao moi sp");
-
         } else {
             res.render('user/createProduct');
         }
@@ -61,7 +57,7 @@ productRoutes.get('/list', async (req: any,res) =>{
         const item = await Item.find({usernameCreate: `${accountUser}`}).limit(limit).skip(limit*offset);
         const iteminPlaylistCreate = await Item.find({usernameCreate: `${accountUser}`});
         const playlist = await Playlist1.find().populate({
-            path: "musicList", select: "filename name", match: {usernameCreate: `${accountUser}`}
+            path: "musicList", select: "filename name usernameCreate" , match: {usernameCreate: accountUser}
         });
         res.render('user/dashboard', {item: item, account: accountUser, iteminPlaylistCreate: iteminPlaylistCreate, playlist: playlist } )
     } catch {
@@ -132,5 +128,14 @@ productRoutes.get('/deleteplaylist/:id', async (req, res) => {
     const idofPlaylist = req.params.id;
     const item = await Playlist1.deleteOne({_id : idofPlaylist})
     res.redirect('/products/list')
+})
+productRoutes.post('/bugreport', async (req, res) => {
+    console.log(req.body)
+    const itemBug = new Bug({
+        title: req.body.title,
+        bugreport: req.body.bugreport,
+    });
+    await itemBug.save()
+    res.send("<script>alert(\"Gửi Báo Cáo thành công\"); window.location.href = \"/products/list\"; </script>");
 })
 export default productRoutes

@@ -36,7 +36,9 @@ const express_session_1 = __importDefault(require("express-session"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const jwtauth_1 = require("./src/middleware/jwtauth");
 const dotenv = __importStar(require("dotenv"));
+const product_model_1 = require("./src/schemas/product.model");
 const playlist_model_1 = require("./src/schemas/playlist.model");
+const admin_router_1 = __importDefault(require("./src/router/admin.router"));
 dotenv.config();
 const port = 3000;
 const app = (0, express_1.default)();
@@ -64,19 +66,20 @@ app.use(passport_1.default.session());
 app.use(bodyParser.json());
 app.use('/auth', auth_router_1.default);
 app.use('/products', product_router_1.default);
+app.use('/admin', admin_router_1.default);
 app.get('/home', (req, res) => {
     res.render('home_Template');
 });
-app.get('/test', (req, res) => {
-    res.render('user/dashboard');
+app.get('/test', async (req, res) => {
+    const item = await product_model_1.Item.find();
+    res.render('home', { item: item });
 });
 app.get('/test1', jwtauth_1.jwtauth, async (req, res) => {
     const accountUser = req.decoded.username;
     const playlist = await playlist_model_1.Playlist1.find().populate({
-        path: "musicList", select: "filename name", match: { usernameCreate: `${accountUser}` }
+        path: "musicList", select: "filename name usernameCreate", match: { usernameCreate: accountUser }
     });
-    console.log(playlist.length);
-    console.log(playlist[0].musicList[0].name);
+    console.log(playlist[0].musicList);
     res.send('ff');
 });
 app.listen(port, () => {
