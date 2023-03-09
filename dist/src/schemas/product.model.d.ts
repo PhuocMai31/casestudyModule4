@@ -29,7 +29,12 @@ interface IItem {
     category: string;
     image: string;
     filename: string;
-    usernameCreate: string;
+    theoretical: number;
+    practice: number;
+    average: number;
+    description: string;
+    evaluate: string;
+    class: string;
     playlist1: object[];
 }
 declare const Item: import("mongoose").Model<IItem, {}, {}, {}, any>;

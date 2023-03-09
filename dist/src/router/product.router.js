@@ -29,16 +29,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const productRoutes = (0, express_1.Router)();
 const product_model_1 = require("../schemas/product.model");
-const jwtauth_1 = require("../middleware/jwtauth");
 const bodyParser = __importStar(require("body-parser"));
 const fileupload = require('express-fileupload');
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const playlist_model_1 = require("../schemas/playlist.model");
 const bug_model_1 = require("../schemas/bug.model");
 productRoutes.use((0, cookie_parser_1.default)("12345"));
 productRoutes.use(fileupload({ createParentPath: true }));
 productRoutes.use(bodyParser.json());
-productRoutes.use('/', jwtauth_1.jwtauth);
 productRoutes.get('/create', (req, res) => {
     try {
         const accountRole = req.decoded.role;
@@ -55,18 +52,19 @@ productRoutes.get('/create', (req, res) => {
 });
 productRoutes.post('/create', async (req, res, next) => {
     try {
+        console.log(req.body);
         const accountUserName = req.decoded.username;
-        let { avatar, music } = req.files;
-        let avatarname = avatar.name;
-        let musicname = music.name;
-        avatar.mv('./public/' + avatarname);
-        music.mv('./public/' + musicname);
+        const theoretical = +req.body.theoretical;
+        const practice = +req.body.practice;
+        const average = (theoretical + practice) / 2;
         const itemNew = new product_model_1.Item({
             name: req.body.name,
-            singer: req.body.singer,
-            category: req.body.category,
-            image: avatarname,
-            filename: musicname,
+            theoretical: req.body.theoretical,
+            practice: req.body.practice,
+            average: average,
+            description: req.body.description,
+            evaluate: req.body.evaluate,
+            class: req.body.class,
             usernameCreate: accountUserName,
         });
         const item = await itemNew.save();
@@ -76,20 +74,80 @@ productRoutes.post('/create', async (req, res, next) => {
         res.render(err.message);
     }
 });
-productRoutes.get('/list', async (req, res) => {
+productRoutes.get('/', async (req, res) => {
+    try {
+        let limit = req.query.limit || 3;
+        let offset = req.query.offset || 0;
+        const item = await product_model_1.Item.find();
+        res.render('user/dashboard', { item: item });
+    }
+    catch (err) {
+        res.render(err.message);
+    }
+});
+productRoutes.get('/c10', async (req, res) => {
     try {
         const accountUser = req.decoded.username;
         let limit = req.query.limit || 3;
         let offset = req.query.offset || 0;
-        const item = await product_model_1.Item.find({ usernameCreate: `${accountUser}` }).limit(limit).skip(limit * offset);
-        const iteminPlaylistCreate = await product_model_1.Item.find({ usernameCreate: `${accountUser}` });
-        const playlist = await playlist_model_1.Playlist1.find().populate({
-            path: "musicList", select: "filename name usernameCreate", match: { usernameCreate: accountUser }
-        });
-        res.render('user/dashboard', { item: item, account: accountUser, iteminPlaylistCreate: iteminPlaylistCreate, playlist: playlist });
+        const item = await product_model_1.Item.find({ class: 'c10' });
+        const iteminPlaylistCreate = await product_model_1.Item.find();
+        res.render('user/dashboard', { item: item, account: accountUser, iteminPlaylistCreate: iteminPlaylistCreate });
     }
-    catch (_a) {
-        res.render('user/error');
+    catch (err) {
+        res.render(err.message);
+    }
+});
+productRoutes.get('/c11', async (req, res) => {
+    try {
+        const accountUser = req.decoded.username;
+        let limit = req.query.limit || 3;
+        let offset = req.query.offset || 0;
+        const item = await product_model_1.Item.find({ class: 'c11' });
+        const iteminPlaylistCreate = await product_model_1.Item.find();
+        res.render('user/dashboard', { item: item, account: accountUser, iteminPlaylistCreate: iteminPlaylistCreate });
+    }
+    catch (err) {
+        res.render(err.message);
+    }
+});
+productRoutes.get('/c12', async (req, res) => {
+    try {
+        const accountUser = req.decoded.username;
+        let limit = req.query.limit || 3;
+        let offset = req.query.offset || 0;
+        const item = await product_model_1.Item.find({ class: 'c12' });
+        const iteminPlaylistCreate = await product_model_1.Item.find();
+        res.render('user/dashboard', { item: item, account: accountUser, iteminPlaylistCreate: iteminPlaylistCreate });
+    }
+    catch (err) {
+        res.render(err.message);
+    }
+});
+productRoutes.get('/listsort', async (req, res) => {
+    try {
+        const accountUser = req.decoded.username;
+        let limit = req.query.limit || 3;
+        let offset = req.query.offset || 0;
+        const item = await product_model_1.Item.find().sort({ average: 1 });
+        const iteminPlaylistCreate = await product_model_1.Item.find();
+        res.render('user/dashboard', { item: item, account: accountUser, iteminPlaylistCreate: iteminPlaylistCreate });
+    }
+    catch (err) {
+        res.render(err.message);
+    }
+});
+productRoutes.get('/listsortt', async (req, res) => {
+    try {
+        const accountUser = req.decoded.username;
+        let limit = req.query.limit || 3;
+        let offset = req.query.offset || 0;
+        const item = await product_model_1.Item.find().sort({ average: -1 });
+        const iteminPlaylistCreate = await product_model_1.Item.find();
+        res.render('user/dashboard', { item: item, account: accountUser, iteminPlaylistCreate: iteminPlaylistCreate });
+    }
+    catch (err) {
+        res.render(err.message);
     }
 });
 productRoutes.get('/delete/:id', async (req, res) => {
@@ -98,39 +156,22 @@ productRoutes.get('/delete/:id', async (req, res) => {
     const item = await product_model_1.Item.deleteOne({ _id: idofItem });
     res.redirect('/products/list');
 });
+productRoutes.get('/detail/:id', async (req, res) => {
+    console.log(req.params.id);
+    const idofItem = req.params.id;
+    const item = await product_model_1.Item.findOne({ _id: idofItem });
+    res.render('user/dashboarddetail', { item: item });
+});
 productRoutes.post('/update/:id', async (req, res) => {
     const idOfItemUpdate = req.params.id;
     const item = await product_model_1.Item.findOne({ _id: req.params.id });
-    let { avatar } = req.files;
-    let avatarname = avatar.name;
-    avatar.mv('./public/' + avatarname);
     item.name = req.body.name;
-    item.singer = req.body.singer;
-    item.category = req.body.category;
-    item.image = avatarname;
+    item.theoretical = req.body.theoretical;
+    item.practice = req.body.practice;
+    item.evaluate = req.body.evaluate;
+    item.description = req.body.description;
+    item.class = req.body.class;
     await item.save();
-    res.redirect('/products/list');
-});
-productRoutes.post('/newplaylist', async (req, res) => {
-    const newPlaylist = new playlist_model_1.Playlist1({
-        name: req.body.playlist
-    });
-    const plsSuccess = await newPlaylist.save();
-    for (const id of req.body.id) {
-        const item = await product_model_1.Item.findOne({ _id: id });
-        item.playlist1.push(newPlaylist);
-        const playlistInitem = await item.save();
-        const playlist = await playlist_model_1.Playlist1.findOne({ name: req.body.playlist });
-        playlist.musicList.push(item);
-        const playlistPushitem = await playlist.save();
-        console.log('day la playlist', playlistPushitem);
-    }
-    res.send("<script>alert(\"Tạo playlist mới thành công\"); window.location.href = \"/products/list\"; </script>");
-});
-productRoutes.get('/deleteplaylist/:id', async (req, res) => {
-    console.log(req.params.id);
-    const idofPlaylist = req.params.id;
-    const item = await playlist_model_1.Playlist1.deleteOne({ _id: idofPlaylist });
     res.redirect('/products/list');
 });
 productRoutes.post('/bugreport', async (req, res) => {

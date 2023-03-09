@@ -5,14 +5,14 @@ import {jwtauth} from "../middleware/jwtauth";
 import * as bodyParser from "body-parser";
 const fileupload = require('express-fileupload');
 import cookieParser from 'cookie-parser';
-import {Playlist1} from "../schemas/playlist.model";
+
 import {Bug} from "../schemas/bug.model";
 productRoutes.use(cookieParser("12345"));
 productRoutes.use(fileupload({ createParentPath: true }));
-// productRoutes.use(express.static('public'))
+
 productRoutes.use(bodyParser.json());
 
-productRoutes.use('/', jwtauth)
+
 productRoutes.get('/create' ,(req: any,res)=> {
     try{
     const accountRole = req.decoded.role
@@ -27,20 +27,20 @@ productRoutes.get('/create' ,(req: any,res)=> {
 });
 productRoutes.post('/create',  async (req:any,res, next) =>{
     try {
+        console.log(req.body)
         const accountUserName = req.decoded.username
+        const theoretical = +req.body.theoretical;
+        const practice = +req.body.practice;
         // Xử lí file ảnh và nhạc
-        let {avatar, music} = req.files;
-        let avatarname = avatar.name;
-        let musicname = music.name;
-        avatar.mv('./public/' + avatarname)
-        music.mv('./public/' + musicname)
-         // Xử lí dữ liệu trong body
+        const average = (theoretical + practice)/2
         const itemNew = new Item({
             name: req.body.name,
-            singer: req.body.singer,
-            category: req.body.category,
-            image: avatarname,
-            filename: musicname,
+            theoretical: req.body.theoretical,
+            practice: req.body.practice,
+            average: average,
+            description: req.body.description,
+            evaluate: req.body.evaluate,
+            class: req.body.class,
             usernameCreate: accountUserName,
         });
         const item = await itemNew.save();
@@ -49,19 +49,80 @@ productRoutes.post('/create',  async (req:any,res, next) =>{
         res.render(err.message)
     }
 });
-productRoutes.get('/list', async (req: any,res) =>{
+productRoutes.get('/', async (req: any,res) =>{
+    try{
+
+        let limit = req.query.limit || 3;
+        let offset = req.query.offset || 0;
+        const item = await Item.find();
+        res.render('user/dashboard', {item: item } )
+    } catch (err){
+        res.render(err.message);
+    }
+});
+productRoutes.get('/c10', async (req: any,res) =>{
     try{
         const accountUser = req.decoded.username
         let limit = req.query.limit || 3;
         let offset = req.query.offset || 0;
-        const item = await Item.find({usernameCreate: `${accountUser}`}).limit(limit).skip(limit*offset);
-        const iteminPlaylistCreate = await Item.find({usernameCreate: `${accountUser}`});
-        const playlist = await Playlist1.find().populate({
-            path: "musicList", select: "filename name usernameCreate" , match: {usernameCreate: accountUser}
-        });
-        res.render('user/dashboard', {item: item, account: accountUser, iteminPlaylistCreate: iteminPlaylistCreate, playlist: playlist } )
-    } catch {
-        res.render('user/error');
+        const item = await Item.find({class: 'c10'})
+        const iteminPlaylistCreate = await Item.find()
+
+        res.render('user/dashboard', {item: item, account: accountUser, iteminPlaylistCreate: iteminPlaylistCreate} )
+    } catch (err){
+        res.render(err.message);
+    }
+});
+productRoutes.get('/c11', async (req: any,res) =>{
+    try{
+        const accountUser = req.decoded.username
+        let limit = req.query.limit || 3;
+        let offset = req.query.offset || 0;
+        const item = await Item.find({class: 'c11'})
+        const iteminPlaylistCreate = await Item.find()
+
+        res.render('user/dashboard', {item: item, account: accountUser, iteminPlaylistCreate: iteminPlaylistCreate } )
+    } catch (err){
+        res.render(err.message);
+    }
+});
+productRoutes.get('/c12', async (req: any,res) =>{
+    try{
+        const accountUser = req.decoded.username
+        let limit = req.query.limit || 3;
+        let offset = req.query.offset || 0;
+        const item = await Item.find({class: 'c12'})
+        const iteminPlaylistCreate = await Item.find()
+
+        res.render('user/dashboard', {item: item, account: accountUser, iteminPlaylistCreate: iteminPlaylistCreate } )
+    } catch (err){
+        res.render(err.message);
+    }
+});
+productRoutes.get('/listsort', async (req: any,res) =>{
+    try{
+        const accountUser = req.decoded.username
+        let limit = req.query.limit || 3;
+        let offset = req.query.offset || 0;
+        const item = await Item.find().sort({average:1});
+        const iteminPlaylistCreate = await Item.find()
+
+        res.render('user/dashboard', {item: item, account: accountUser, iteminPlaylistCreate: iteminPlaylistCreate } )
+    } catch (err){
+        res.render(err.message);
+    }
+});
+productRoutes.get('/listsortt', async (req: any,res) =>{
+    try{
+        const accountUser = req.decoded.username
+        let limit = req.query.limit || 3;
+        let offset = req.query.offset || 0;
+        const item = await Item.find().sort({average:-1});
+        const iteminPlaylistCreate = await Item.find()
+
+        res.render('user/dashboard', {item: item, account: accountUser, iteminPlaylistCreate: iteminPlaylistCreate} )
+    } catch (err){
+        res.render(err.message);
     }
 });
 productRoutes.get('/delete/:id', async (req, res) => {
@@ -70,65 +131,27 @@ productRoutes.get('/delete/:id', async (req, res) => {
     const item = await Item.deleteOne({_id : idofItem})
     res.redirect('/products/list')
 })
+productRoutes.get('/detail/:id', async (req, res) => {
+    console.log(req.params.id)
+    const idofItem = req.params.id;
+    const item = await Item.findOne({_id : idofItem})
+    res.render('user/dashboarddetail', {item: item})
+})
 productRoutes.post('/update/:id', async (req: any, res) =>{
     const idOfItemUpdate = req.params.id;
     // @ts-ignore
     const item = await Item.findOne({_id: req.params.id})
-    let {avatar} = req.files;
-    let avatarname = avatar.name;
-    avatar.mv('./public/' + avatarname)
     item.name = req.body.name;
-    item.singer = req.body.singer;
-    item.category = req.body.category;
-    item.image = avatarname;
+    item.theoretical = req.body.theoretical;
+    item.practice = req.body.practice;
+    item.evaluate = req.body.evaluate;
+    item.description = req.body.description;
+    item.class = req.body.class;
     await item.save()
     res.redirect('/products/list');
-
 })
-productRoutes.post('/newplaylist', async (req: any, res) =>{
-    // req.body.id.forEach((id, index) =>{
-    //
-    //     const item = await Item.findOne({_id: id})
-    //     console.log(item)
-    //     // @ts-ignore
-    //     // item.playlist.push({keyword: req.body.keyword});
-    // })
-    const newPlaylist = new Playlist1({
-        name: req.body.playlist
-    })
-    const plsSuccess = await newPlaylist.save();
-    for (const id of req.body.id) {
-        const item = await Item.findOne({_id: id});
-        // const playlist1New = new Playlist1({
-        //     name: req.body.playlist
-        // });
-        // // @ts-ignore
-        // // item.playlist1 = playlist1New
-        // item.playlist1.push({playlist: req.body.playlist});
 
-        item.playlist1.push(newPlaylist);
-        // const itemInPlayList = await playlist1New.save();
-        const playlistInitem = await item.save();
-        const playlist = await Playlist1.findOne({name: req.body.playlist})
 
-        playlist.musicList.push(item)
-        const playlistPushitem = await playlist.save()
-        console.log('day la playlist',playlistPushitem)
-
-        // const item = await Item.findByIdAndUpdate(
-        //     id,
-        //     { $push: { plsSuccess: plsSuccess._id } },
-        //     { new: true, useFindAndModify: false }
-        // )
-    }
-    res.send("<script>alert(\"Tạo playlist mới thành công\"); window.location.href = \"/products/list\"; </script>");
-});
-productRoutes.get('/deleteplaylist/:id', async (req, res) => {
-    console.log(req.params.id)
-    const idofPlaylist = req.params.id;
-    const item = await Playlist1.deleteOne({_id : idofPlaylist})
-    res.redirect('/products/list')
-})
 productRoutes.post('/bugreport', async (req, res) => {
     console.log(req.body)
     const itemBug = new Bug({

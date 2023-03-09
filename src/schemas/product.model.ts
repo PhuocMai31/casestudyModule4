@@ -7,7 +7,12 @@ interface IItem {
     image: string,
 
     filename: string,
-    usernameCreate: string,
+    theoretical : number,
+    practice : number,
+    average: number,
+    description: string,
+    evaluate: string,
+    class: string,
     // playlist: object[],
     playlist1: object[]
 }
@@ -19,14 +24,14 @@ interface IItem {
 
 const itemSchema = new Schema<IItem>({
     name: String,
-    singer: String,
-    category: String,
-    image: String,
-    filename: String,
-    usernameCreate: String,
+    theoretical : Number,
+    practice : Number,
+    average: Number,
+    description: String,
+    evaluate: String,
+    class: String,
     // @ts-ignore
-    playlist1: [{ type:Schema.Types.ObjectId, ref: "Playlist1" }] ,
-    // playlist: [playlistSchema],
+
 })
 const Item = model<IItem>('Item', itemSchema);
 export {Item}

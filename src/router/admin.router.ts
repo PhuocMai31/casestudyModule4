@@ -5,7 +5,7 @@ import {jwtauth} from "../middleware/jwtauth";
 import * as bodyParser from "body-parser";
 const fileupload = require('express-fileupload');
 import cookieParser from 'cookie-parser';
-import {Playlist1} from "../schemas/playlist.model";
+// import {Playlist1} from "../schemas/playlist.model";
 import productRoutes from "./product.router";
 import {Account} from "../schemas/account.model";
 import {Bug} from "../schemas/bug.model";

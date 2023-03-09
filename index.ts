@@ -14,7 +14,7 @@ import mailer from 'express-mailer';
 import * as dotenv from 'dotenv';
 import path from "path";
 import {Item} from "./src/schemas/product.model";
-import {Playlist1} from "./src/schemas/playlist.model";
+
 import adminRouter from "./src/router/admin.router";
 dotenv.config();
 
@@ -26,7 +26,7 @@ app.set('view engine', 'ejs');
 app.set('views','./src/views');
 app.use(cookieParser("12345"));
 app.use(express.static('public'))
-const db_url = 'mongodb://127.0.0.1:27017/dbtest';
+const db_url = 'mongodb://127.0.0.1:27017/dbtest1';
 mongoose.set('strictQuery', true)
 mongoose.connect(db_url)
     .then(() => {
@@ -46,20 +46,13 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.json());
-app.use('/auth', loginRoutes);
-app.use('/products', productRouter);
-app.use('/admin', adminRouter);
-// app.use('/products', jwtauth);
 
-// xử lí router
-// app.get('/home', (req,res) => {
-//     res.render('home_Template')
-// })
+app.use('/', productRouter);
 
-app.get('/home', jwtauth,async (req: any,res) => {
-    const item = await Item.find()
-    res.render('home', {item: item})
-})
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}
+
 app.listen(port, () => {
     console.log('app running on port '+ port)
 })

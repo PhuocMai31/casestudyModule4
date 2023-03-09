@@ -200,51 +200,22 @@
 <body>
 
 <div class="wrapper">
+    <% item.forEach((item, index) => { %>
     <div class="title-text">
-        <div class="title login">Đăng nhập</div>
-        <div class="title signup">Đăng ký</div>
+        <div class="title login"><%= item.name %></div>
     </div>
+    <br>
     <div class="form-container">
-        <div class="slide-controls">
-            <input type="radio" name="slide" id="login" checked>
-            <input type="radio" name="slide" id="signup">
-            <label for="login" class="slide login">Đăng nhập</label>
-            <label for="signup" class="slide signup">Đăng ký</label>
+        <div class="">
+            <label style="margin-left: 70px"><img class="card-img-top" style="max-height: 100px" src="/<%= item.image %>" alt="Card image cap"></label>
+            <label ><audio controls>
+                    <source src="/<%= item.filename %>" type="audio/ogg">
+                </audio></label>
             <div class="slider-tab"></div>
+                <% }) %>
         </div>
-        <div class="form-inner">
-            <form id="form-auth" method="post" action="/auth/login" enctype="multipart/form-data" class="login">
-                <div class="field">
-                    <input type="text" placeholder="Email" required name="username">
-                    <small id="emailHelp" class="form-text text-muted">Không bao giờ chia sẻ tài khoản, mật khẩu với ai khác</small>
-                </div>
-                <div class="field">
-                    <input type="password" placeholder="Mật khẩu" required name="password">
-                </div>
-                <div class="pass-link"><a href="/auth/password/reset">Quên mật khẩu?</a></div>
-                <div class="field btn">
-                    <div class="btn-layer"></div>
-                    <input type="submit" value="Đăng nhập">
-                </div>
-                <div class="signup-link">Bạn không có tài khoản? <a href="">Đăng ký ngay</a></div>
-            </form>
-            <form method="post" action="/auth/register" enctype="multipart/form-data" class="signup">
-                <div class="field">
-                    <input type="text" placeholder="Email" required name="username">
-                </div>
-                <div class="field">
-                    <input type="password" placeholder="Mật khẩu" required name="password">
-                    <small id="emailHelp" class="form-text text-muted">Mật khẩu phải có 8 kí tự, một chữ cái và một cữ số</small>
-                </div>
-<!--                <div class="field">-->
-<!--                    <input type="password" placeholder="Nhập lại mật khẩu" required>-->
-<!--                </div>-->
-                <div class="field btn">
-                    <div class="btn-layer"></div>
-                    <input type="submit" value="Tạo tài khoản">
-                </div>
-            </form>
-        </div>
+        <br>
+        <a href="/home">Back</a>
     </div>
 </div>
 

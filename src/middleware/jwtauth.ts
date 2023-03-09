@@ -5,7 +5,6 @@ export const jwtauth = async (req,res,next) => {
     try {
         var cookies = cookie.parse(req.headers.cookie || '');
         let accessToken = cookies.name;
-        // let accessToken = req.body["access_token"];
         if(accessToken){
             jwt.verify(accessToken, "123456789", (err,decoded) => {
                 if (err){

@@ -30,13 +30,13 @@
 
     <!-- Sidebar -->
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
+        <br>
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
-            <div class="sidebar-brand-text mx-3">CHƯƠNG TRÌNH NGƯỜI DÙNG <sup>no 1</sup></div>
+            <div class="sidebar-brand-text mx-3">QUẢN LÍ HỌC VIÊN <sup>no 1</sup></div>
         </a>
 
         <!-- Divider -->
@@ -45,58 +45,10 @@
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
             <a class="nav-link" href="index.html">
-                <i class="fa-regular fa-user-music"></i>
-                <span>ALL PlayList :</span></a>
-        </li>
-        <% playlist.forEach((playlist, index) => { %>
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-               aria-expanded="true" aria-controls="collapseTwo">
-                <span><button style="background-color: darkorange; color: whitesmoke" type="button" class="btn" data-toggle="modal" data-target="#runModal<%= playlist.id %>">
-                <%= playlist.name %> <i style="font-size: 20px; margin-left: 10px; color: black" class="fa-duotone fa-list-music"></i>
-            </button></span>
-            </a>
+
+
         </li>
 
-
-            <!-- Modal -->
-            <div class="modal fade" id="runModal<%= playlist.id %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 style="margin-left: 20px" class="modal-title" id="exampleModalLabel">All Playlist of User: <%= playlist.name %></h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="card-body">
-                                <table class="table table-striped table-bordered table-hover">
-                                    <tr>
-                                        <% playlist.musicList.forEach((item, index) => { %>
-                                        <th style="text-align: center" style="text-align: center"><%= item.name %></th>
-                                    </tr>
-
-                                     <tr>
-                                           <td style="text-align: center"><audio controls>
-                                                   <source src="/<%= item.filename %>" type="audio/ogg">
-                                               </audio></td>
-                                     </tr>
-                                    <% }) %>
-                                </table>
-                            </div>
-                        </div>
-                        <form action="/products/deleteplaylist/<%= playlist.id %>" method="get">
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                            <button type="submit" onclick="return confirm('Xóa Playlist này?')" class="btn btn-danger">Xóa Playlist này</button>
-                        </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        <% }) %>
         <hr class="sidebar-divider d-none d-md-block">
         <div class="text-center d-none d-md-inline">
             <button class="rounded-circle border-0" id="sidebarToggle"></button>
@@ -120,9 +72,6 @@
                 </button>
 
                 <!-- Topbar Search -->
-
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                    <a href="/home" class="btn btn-secondary">Trang Chủ</a>
 
 
                 <!-- Topbar Navbar -->
@@ -156,7 +105,6 @@
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><%= account %></span>
                             <img class="img-profile rounded-circle"
                                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTolcVU9mJK9CRAZFZtwmT4sRO18aI8TwrKIRr3els&s">
                         </a>
@@ -194,13 +142,6 @@
 
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <i style="font-size: 50px; margin-left: 40px" class="fa-thin fa-tv-music"></i>
-                    <button style="margin-left: 265px" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1">
-                            Tạo Playlist
-                        </button>
-                    <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2">
-                        Báo Cáo Lỗi
-                    </button>
 
 
                     <!-- Modal1 -->
@@ -222,17 +163,9 @@
                                             <th  style="text-align: center">Tên bài hát</th>
                                             <th style="text-align: center">Chọn</th>
                                         </tr>
-                                        <% iteminPlaylistCreate.forEach((item, index) => { %>
-                                        <tr>
-                                            <td style="text-align: center"><%= index + 1 %></td>
-                                            <td style="text-align: center"><%= item.name %></td>
-                                            <td style="text-align: center"><input type="checkbox" name="id" value="<%= item.id %>"></td>
-                                            <% }) %>
+
                                     </table>
-                                    <div class="form-group">
-                                        <label>Nhập tên playlist</label>
-                                        <input type="text" class="form-control" name="playlist">
-                                    </div>
+
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -280,7 +213,7 @@
                             <!-- Card Header - Dropdown -->
                             <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Danh Sách Bài Hát Của Tôi</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Danh Tất Cả Học Viên</h6>
                                 <div class="dropdown no-arrow">
                                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -289,10 +222,12 @@
                                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                                          aria-labelledby="dropdownMenuLink">
                                         <div class="dropdown-header">Dropdown Header:</div>
-                                        <a class="dropdown-item" href="#">Action</a>
-                                        <a class="dropdown-item" href="#">Another action</a>
+                                        <a class="dropdown-item" href="/products/listsort">Điểm trung bình tăng dần</a>
+                                        <a class="dropdown-item" href="/products/listsortt">Điểm trung bình giảm dần</a>
+                                        <a class="dropdown-item" href="/products/c10">Học viên c10</a>
+                                        <a class="dropdown-item" href="/products/c11">Học viên c11</a>
+                                        <a class="dropdown-item" href="/products/c12">Học viên c12</a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Something else here</a>
                                     </div>
                                 </div>
                             </div>
@@ -301,39 +236,33 @@
                                 <table class="table table-striped table-bordered table-hover">
                                     <tr>
                                         <th>#</th>
-                                        <th style="text-align: center" style="text-align: center">Tên bài hát</th>
-                                        <th style="text-align: center">Ca Sĩ</th>
-                                        <th style="text-align: center">Thể Loại</th>
-                                        <th style="text-align: center">Ảnh</th>
-                                        <th style="text-align: center">File Nhạc</th>
+                                        <th style="text-align: center" style="text-align: center">Tên học viên</th>
+                                        <th style="text-align: center">Lớp Học</th>
+                                        <th style="text-align: center">Đánh giá</th>
                                         <th></th>
                                     </tr>
                                     <% item.forEach((item, index) => { %>
                                         <tr>
                                             <td style="text-align: center"><%= index + 1 %></td>
-                                            <td style="text-align: center"><%= item.name %></td>
-                                            <td style="text-align: center"><%= item.singer %></td>
-                                            <td style="text-align: center"><%= item.category %></td>
-                                            <td><img class="card-img-top" style="max-height: 80px" src="/<%= item.image %>" alt="Card image cap"></td>
-                                            <td><audio controls>
-                                                    <source src="/<%= item.filename %>" type="audio/ogg">
-                                                </audio></td>
+                                            <td style="text-align: center"><a href="/products/detail/<%= item.id %>"><%= item.name %></a></td>
+                                            <td style="text-align: center"><%= item.class %></td>
+                                            <td style="text-align: center"><%= item.evaluate %></td>
                                             <td><a onclick="return confirm('Bạn có chắc muốn xóa')"
                                                    href="/products/delete/<%= item.id %>" class="btn btn-danger">Delete.</a>
                                                 <br>
                                                 <br>
 <!--                                                <a onclick="return confirm('Bạn có muốn update không')"-->
 <!--                                                   href="/products/update/<%= item.id %>" class="btn btn-warning">Update</a></td>-->
-                                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#runModal<%= item.id %>">
+                                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#runModal1<%= item.id %>">
                                                 Update
                                                 </button></td></tr>
 
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="runModal<%= item.id %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <!-- Modal1 -->
+                                            <div class="modal fade" id="runModal1<%= item.id %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Cập Nhật Thuộc Tính Bài Hát: </h5>
+                                                            <h5 class="modal-title" id="exampleModalLabel">Cập Nhật Thông Tin Học Viên: </h5>
                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
@@ -342,25 +271,31 @@
                                                             <div class="card-body">
                                                                 <form method="post" action="/products/update/<%= item.id %>" enctype="multipart/form-data">
                                                                     <div class="form-group">
-                                                                        <label>Tên Bài Hát</label>
+                                                                        <label>Tên Học Viên</label>
                                                                         <input type="text" class="form-control" value="<%= item.name %>" name="name">
                                                                     </div>
                                                                     <div class="form-group">
-                                                                        <label>Ca Sĩ</label>
-                                                                        <input type="text" value="<%= item.singer %>" class="form-control" name="singer">
+                                                                        <label>Điểm Lí Thuyết</label>
+                                                                        <input type="number" value="<%= item.theoretical %>" class="form-control" name="theoretical">
                                                                     </div>
                                                                     <div class="form-group">
-                                                                        <label for="sel1">Thể Loại</label>
-                                                                        <select class="form-control" id="sel1" name="category">
-                                                                            <option value="nhactre">Nhạc Trẻ</option>
-                                                                            <option value="dangian">Dân gian</option>
-                                                                            <option value="edm">Electronic</option>
-                                                                            <option value="lofi">Lofi</option>
+                                                                        <label>Điểm Thực Hành</label>
+                                                                        <input type="number" value="<%= item.practice %>" class="form-control" name="practice">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="sel1">Đánh Giá</label>
+                                                                        <select class="form-control" id="sel1" name="evaluate">
+                                                                            <option value="dat">Đạt</option>
+                                                                            <option value="khongdat">Không Đạt</option>
                                                                         </select>
                                                                     </div>
                                                                     <div class="form-group">
-                                                                        <label>Hình ảnh</label>
-                                                                        <input type="file" class="form-control" name="avatar">
+                                                                        <label>Mô Tả Học Viên</label>
+                                                                        <input type="text" value="<%= item.description %>" class="form-control" name="description">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Lớp Học</label>
+                                                                        <input type="text" class="form-control" name="class">
                                                                     </div>
 
 
@@ -374,14 +309,55 @@
                                                 </div>
                                             </div>
 
+                                                <div class="modal fade" id="runModal2<%= item.id %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Cập Nhật Thông Tin Học Viên: </h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="card-body">
+                                                                    <form method="post" action="/products/update/<%= item.id %>" enctype="multipart/form-data">
+                                                                        <div class="form-group">
+                                                                            <label>Tên Bài Hát</label>
+                                                                            <input type="text" class="form-control" value="<%= item.name %>" name="name">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label>Ca Sĩ</label>
+                                                                            <input type="text" value="<%= item.singer %>" class="form-control" name="singer">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="sel1">Thể Loại</label>
+                                                                            <select class="form-control" id="sel1" name="category">
+                                                                                <option value="nhactre">Nhạc Trẻ</option>
+                                                                                <option value="dangian">Dân gian</option>
+                                                                                <option value="edm">Electronic</option>
+                                                                                <option value="lofi">Lofi</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label>Hình ảnh</label>
+                                                                            <input type="file" class="form-control" name="avatar">
+                                                                        </div>
 
+
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                            <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                     <% }) %>
                                 </table>
-                                <div style="margin-left: 350px">
-                                <a href="/products/list?offset=0&limit=3" class="btn btn-primary">1</a>
-                                <a href="/products/list?offset=1&limit=3" class="btn btn-primary">2</a>
-                                <a href="/products/list?offset=2&limit=3" class="btn btn-primary">3</a>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -392,7 +368,7 @@
                             <!-- Card Header - Dropdown -->
                             <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Tạo Bài Hát Mới</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Thêm Học Viên Mới</h6>
                                 <div class="dropdown no-arrow">
                                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -412,31 +388,36 @@
                             <div class="card-body">
                                 <form method="post" action="/products/create" enctype="multipart/form-data">
                                     <div class="form-group">
-                                        <label>Tên Bài Hát</label>
+                                        <label>Tên Học Viên</label>
                                         <input type="text" class="form-control" name="name">
                                     </div>
                                     <div class="form-group">
-                                        <label>Ca Sỹ</label>
-                                        <input type="text" class="form-control" name="singer">
+                                        <label>Điểm Lí Thuyết</label>
+                                        <input type="number" class="form-control" name="theoretical">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Điểm Thực Hành</label>
+                                        <input type="number" class="form-control" name="practice">
                                     </div>
                                     <div>
-                                    <label for="sel1">Thể Loại</label>
-                                    <select class="form-control" id="sel1" name="category">
-                                        <option value="nhactre">Nhạc Trẻ</option>
-                                        <option value="dangian">Dân gian</option>
-                                        <option value="edm">Electronic</option>
-                                        <option value="lofi">Lofi</option>
+                                    <label for="sel1">Đánh Giá</label>
+                                    <select class="form-control" id="sel1" name="evaluate">
+                                        <option value="dat">Đạt</option>
+                                        <option value="khongdat">Không Đạt</option>
                                     </select>
                                         <br>
                                     </div>
                                     <div class="form-group">
-                                        <label>Ảnh bài hát</label>
-                                        <input type="file" class="form-control" name="avatar">
+                                        <label>Mô Tả Học Viên</label>
+                                        <input type="text" class="form-control" name="description">
                                     </div>
                                     <div class="form-group">
-                                        <label>Vui lòng chọn file tải lên</label>
-                                        <input type="file" class="form-control" name="music">
-                                        <br>
+                                        <label>Lớp Học:</label>
+                                        <select class="form-control" id="sel1" name="class">
+                                            <option value="c10">c10</option>
+                                            <option value="c11">c11</option>
+                                            <option value="c12">c12</option>
+                                        </select>
                                     </div>
                                     <button type="submit" class="btn btn-primary">Tạo Mới</button>
                                 </form>

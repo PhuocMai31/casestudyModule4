@@ -35,7 +35,7 @@
     --orange-color: #fa8b26;
     --blue-violet: #a742c6;
     --linear-gradient-bg: linear-gradient(180deg, #740091, #2d1a4c);
-    --theme-modal-bg: #432275;
+    --theme-modal-bg: #3D64D3;
 }
 
 body {
@@ -59,6 +59,7 @@ header {
 
 
 header .song-side {
+    margin-left: 20vw;
     position: relative;
     z-index: 3;
     height: 87%;
@@ -83,7 +84,12 @@ header .song-side {
 }
 
 aside {
-    width: 20%;
+    left: 0;
+    position: fixed;
+    top:0;
+    width: 20vw;
+    height: 100vh;
+    z-index: 10;
 }
 
 .menu-side-top {
@@ -95,8 +101,13 @@ aside {
     margin-left: 80px;
     margin-top: 30px;
     font-family: 'K2D', sans-serif;
-
 }
+.menu-side-top i{
+    background: linear-gradient(to bottom, var(--orange-color) 0%, var(--text-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 .menu-side-mid ui li {
     padding-top: 10px;
     font-size: 20px;

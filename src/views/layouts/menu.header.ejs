@@ -1,20 +1,16 @@
 <header class="song-side__heading">
     <nav class="song-side__heading--left">
         <div class="song-side__heading--search">
-            <div class="search__container" action="">
+            <form class="search__container" action="/searchsong">
                 <div class="search-btn">
                     <i class="bi bi-search"></i>
                 </div>
-                <input class="hide-on-mobile-tablet" type="text" name="search-song" id="search-song"
+                <input class="hide-on-mobile-tablet" type="text" name="search_song" id="search-song"
                        placeholder="Nhập tên bài hát"/>
-            </div>
-        </div>
-        <div class="song-side__heading--tabs">
-            <a href="/home">Trang chủ</a>
+            </form>
         </div>
     </nav>
     <div class="song-side__heading--right">
         <a href="/auth/login"><i class="fa-solid fa-circle-user" ></i></a>
-
     </div>
 </header>
